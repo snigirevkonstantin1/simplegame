@@ -1,0 +1,183 @@
+* {
+    margin: 0 0;
+    padding: 0 0;
+    
+    color: #434344;
+}
+body {
+    background-color: #cfd0cf;
+    min-width: 620px;
+}
+
+.modal{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+.modalcontent{
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    min-width: 350px;
+    text-align: center;
+    
+}
+#againbtn {
+    background: linear-gradient(45deg, rgba(34,171,147,1) 0%, rgba(25,102,141,1) 100%);
+    padding: 10px 30px;
+    color: white;
+    border: none;
+    font-size: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 8px;
+}
+
+#againbtn:active {
+    box-shadow: 2px 1px 8px rgba(0,0,0,0.5)  inset;
+    outline: none;
+}
+p span {
+    position: relative;
+    top: 10px;
+    display: inline-block;
+    font-size: 40px;
+    font-weight: bold;
+    margin-top: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    animation: bounce .4s ease infinite alternate;
+    top: 10px;
+    transform: scaleY(0.75);
+}
+
+
+p span:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+p span:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+p span:nth-child(4) {
+    animation-delay: 0.3s;
+  }
+p span:nth-child(5) {
+    animation-delay: 0.4s;
+  }
+
+@keyframes bounce {
+    100% {
+        transform: scaleY(1.25);
+      top: -10px;
+     
+    }
+  }
+
+.header {
+    margin-top: 40px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 42px;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 47px;
+    }
+
+
+
+.animated {
+    animation: animal 0.5s linear 1 forwards;   
+}
+
+
+.animatedtwice {
+    animation: animaltwice 0.5s linear 1 forwards;   
+}
+
+
+.conteiner{
+    transform-style: preserve-3d;
+    margin-left: 25px;
+    margin-bottom: 25px;
+    cursor: pointer;
+    
+}
+.conteiner, .conteiner div{
+    height: 130px;
+    width: 130px;
+    border-radius: 9px;
+    
+    
+}
+.conteiner div {
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+    position: absolute;
+    
+}
+.conteiner div:nth-child(2) {
+    background: linear-gradient(45deg, rgba(34,171,147,1) 0%, rgba(25,102,141,1) 100%);
+    backface-visibility: hidden;
+  }
+
+
+  .conteiner div:nth-child(1){
+      background-color: white;
+      
+      
+  }
+#one {
+    margin: 0 auto;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    transform-style: preserve-3d;
+    perspective: 600px;
+    width: 620px;
+}
+.conteiner div {
+    padding-top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 75px;
+}
+@keyframes animal {
+  
+    to{
+        transform: rotateY(180deg);  
+    }
+}
+
+@keyframes animaltwice {
+  
+    to{
+        transform: rotateY(-180deg);  
+    }
+}
+.correct{
+    background: #5ad66f !important;
+}
+
+.incorrect{
+    background: #f44336 !important;
+}
+.timer {
+    margin-top: 5px;
+}
+
+
+#minsec {
+    line-height: 36px;
+    font-size: 32px;
+    color: #434344;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
