@@ -1,33 +1,35 @@
-var timep = document.getElementById('timep')
-var againbtn = document.getElementById('againbtn');
-var shit = document.getElementById('mymodal');
-var timer = document.getElementById('minsec');
+const timep = document.getElementById('timep');
+const againbtn = document.getElementById('againbtn');
+const modal = document.getElementById('mymodal');
+const timer = document.getElementById('minsec');
+const conteinerOfMemoji = document.querySelectorAll('div.conteiner');
 
 
 
-var memojibox = {
-    count: 0,
+let memojibox = {
+    boardsize: document.querySelectorAll('div.conteiner').length,
+    itsFirstClick: false,
     memoji: ['🐶', '🐱', '🐭', '🐹', '🐰', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐙', '🐵', '🦄', '🐞', '🦀', '🐟', '🐊', '🐓', '🦃', '🐿'],
-    memojiarea: function(){
-        var i = 0;
-        var j = 0;
-        var count = 0;
-        var arr = [];
-        var returnarr = []
-        while (i < 6){
-            var elem = this.memoji[Math.floor(Math.random() * 23)];
-            if (arr.includes(elem)){
+    memojiBoard() {
+        let i = 0;
+        let j = 0;
+        let count = 0;
+        let arrofmemoji = [];
+        let returnarr = []
+        while (i < this.boardsize/2){
+            let elem = this.memoji[Math.floor(Math.random() * this.memoji.length)];
+            if (arrofmemoji.includes(elem)){
                 continue;
             }
             else {
-                arr[i] = elem;
+                arrofmemoji[i] = elem;
                     i++;
             };
         };
-        while (j < 6){
-            var index = Math.floor(Math.random() * 12);
+        while (j < this.boardsize/2){
+            let index = Math.floor(Math.random() * this.boardsize);
             if (returnarr[index] === undefined){
-                returnarr[index] = arr[j];
+                returnarr[index] = arrofmemoji[j];
                 count++;
                 if (count === 2){
                     count = 0;
@@ -40,61 +42,58 @@ var memojibox = {
         };
         return returnarr      
     },
-    memojicounter: function(){
-        this.count++
-    },
+    memojiFirstClick: () => this.itsFirstClick = true,
 };
 
 
 function init(){
-    var arr = document.querySelectorAll('div.conteiner');
-    shit.style.display = 'none';
-    againbtn.addEventListener('click', function(){
-        init();
-    })
-    timep.innerHTML = ''
-    var timeString = new Date(0, 0, 0, 0, 31, 17, 0).toISOString().substr(14, 5);
+    modal.style.display = 'none';
+    againbtn.addEventListener('click', () => init());
+    timep.innerHTML = '';
+    let timeString = new Date(0, 0, 0, 0, 31, 17, 0).toISOString().substr(14, 5);
     timer.innerHTML = timeString; 
-    var incr = document.querySelectorAll('.correct');
-    for (var i = 0; i < incr.length; i++){
-        flip(incr[i])
+    let correctClass = document.querySelectorAll('.correct');
+    for (let i = 0; i < correctClass.length; i++){
+        flip(correctClass[i]);
     };
-    var incr = document.querySelectorAll('.active');
-    for (var i = 0; i < incr.length; i++){
-        flip(incr[i])
+    let activeClass = document.querySelectorAll('.active');
+    for (let i = 0; i < activeClass.length; i++){
+        flip(activeClass[i]);
     };   
-    memojibox.count = 0;
+    memojibox.itsFirstClick = false;
+    // Задержка при инициализации борда
     setTimeout(()=>{
-    CreateBoard(arr);
-    CreateBoardTwice(arr);
-    }, 300)  
-}
+    CreateBoard(conteinerOfMemoji);
+    CreateBoardTwice(conteinerOfMemoji);
+    }, 300);  
+};
 
 
+// Работа с таймером и модальным окном
 function CreateBoardTwice(list){
-    sec = 16;
-    var box = memojibox.memojiarea();
-    for (var i = 0; i < list.length; i++){
+    let second = 16; 
+    for (let i = 0; i < list.length; i++){
         list[i].addEventListener('click', function(){
-            memojibox.memojicounter();
-            if (memojibox.count === 1){
-                var timerint = new Timer(function(){
-                timer.innerHTML = new Date(0, 0, 0, 0, 31, sec--, 0).toISOString().substr(14, 5);
-                var incr = document.querySelectorAll('.correct')
-                if (incr.length == 12){
+            memojibox.memojiFirstClick();
+            if (!memojibox.itsFirstClick){
+                memojibox.itsFirstClick = true;
+                let timerint = new Timer(function(){
+                timer.innerHTML = new Date(0, 0, 0, 0, 31, second--, 0).toISOString().substr(14, 5); 
+                let checkCorrect = document.querySelectorAll('.correct');
+                if (checkCorrect.length === conteinerOfMemoji.length){
                     timerint.stop();
                     timeOut.stop();
                     againbtn.innerHTML = 'Play again';
                     CreateWord('WIN')
-                    shit.style.display = 'block'; 
+                    modal.style.display = 'block'; 
                 }
-               }, 1000)
-               var timeOut = new Coundown ( function(){
+               }, 1000);
+               let timeOut = new Coundown ( function(){
                    timerint.stop();
                    againbtn.innerHTML = 'Try again';
                    CreateWord('LOSE');
-                   shit.style.display = 'block';
-                }, 50000)
+                   modal.style.display = 'block';
+                }, 60000)
             };  
         }, false);
 
@@ -103,20 +102,20 @@ function CreateBoardTwice(list){
 
 
 function Coundown(func, t){
-    var coundObj = setTimeout(func, t);
+    let coundObj = setTimeout(func, t);
 
     this.stop = function(){
         if (coundObj){
-            clearInterval(coundObj);
+            clearTimeout(coundObj);
             coundObj = null;
         };
-        return this
+        return this;
     };
 };
 
 
 function Timer(func, t){
-    var timeObj = setInterval(func, t);
+    let timeObj = setInterval(func, t);
 
     this.stop = function(){
         if (timeObj){
@@ -127,67 +126,94 @@ function Timer(func, t){
     };
 };
 
-
+// Запись значения в блок
 function CreateBoard(list){
-    var box = memojibox.memojiarea();
-    for (var i = 0; i < list.length; i++){
-        var first = list[i].querySelector(".conteiner div:nth-child(1)");
-        first.innerHTML = box[i]
-        list[i].addEventListener('click', SomeFunction, false);
+    let box = memojibox.memojiBoard();
+    for (let i = 0; i < list.length; i++){
+        list[i].children[0].innerHTML = box[i];
+        list[i].addEventListener('click', checkCorrectCard, false);
     };
 }
 
 
-function SomeFunction(){
-    var diver = this;
-    var open = diver.querySelector('.conteiner div:nth-child(1)');
-    if (open.classList.contains('correct')){
+// работа с логикой игры
+function checkCorrectCard(){
+    let openCard = this;
+    let open = openCard.children[0]; // через детей
+    if (open.classList.contains('correct') || open.classList.contains('incorrect')){
         return
     };
-    diver.style.WebkitTransitionDuration='0.5s';
-    diver.style.webkitTransform = 'rotateY(180deg)';
+    if (open.classList.contains('active')){
+        open.classList.remove('active'); 
+        flip(open);
+    }
+    animated({ duration: 400, timing(timeFraction) {return timeFraction;},
+        draw(progress) {
+            openCard.style.webkitTransform = 'rotateY(' + progress * 180 + 'deg)';
+       }
+     });
     open.classList.add('active');
-    var incr = document.querySelectorAll('.incorrect');
-    if (incr.length === 2){
-        for (var i = 0; i < incr.length; i++){
-            flip(incr[i])
+    let incorrect = document.querySelectorAll('.incorrect');
+    if (incorrect.length === 2){
+        for (let i = 0; i < incorrect.length; i++){
+            flip(incorrect[i]);
         }
     };
-    var test = document.querySelectorAll('.active');
-    if (test.length == 2){
-        if(test[0].textContent === test[1].textContent) {
-            for (var i = 0; i < test.length; i++){
-            test[i].classList.add('correct');
-            test[i].classList.remove('active');   
+    let active = document.querySelectorAll('.active');
+    if (active.length === 2){
+        if(active[0].textContent === active[1].textContent) {
+            for (let i = 0; i < active.length; i++){
+                active[i].classList.add('correct');
+                active[i].classList.remove('active');  
         };
     }
         else {
-            for (var i = 0; i < test.length; i++){
-                test[i].classList.add('incorrect');
+            for (let i = 0; i < active.length; i++){
+                active[i].classList.add('incorrect');
             };
         };
     };
 };
 
 
-function flip(a){
-    var b = (a.previousSibling.parentElement);
+//Анимации 
+function flip(element){
+    let flipelement = (element.previousSibling.parentElement);
+    console.log(flipelement)
     setTimeout (function() {
-        b.style.webkitTransform = 'rotateY(0deg)';
-        while (a.classList.length > 0){
-            a.classList.remove(a.classList.item(0))
+        animated({ duration: 500, timing(timeFraction) {return timeFraction;},
+     draw(progress) {
+         flipelement.style.webkitTransform = 'rotateY(' + (180 - progress * 180) + 'deg)';
+       }
+     });
+        while (element.classList.length > 0){
+            element.classList.remove(element.classList.item(0))
         }
     }, 0.0)
 }
 
 
 function CreateWord(word) {
-	for(var i = 0; i < word.length; i++) {
-		var newSpan = document.createElement('span');
+	for(let i = 0; i < word.length; i++) {
+		let newSpan = document.createElement('span');
         newSpan.innerHTML = word[i];
         timep.appendChild(newSpan);
 	}
 };
+
+
+function animated({timing, draw, duration}){
+    let start = performance.now();
+    requestAnimationFrame(function animated(time){
+        let timeFaction = (time - start) / duration;
+        if (timeFaction > 1) timeFaction = 1;
+        let progress = timing(timeFaction);
+        draw(progress);
+        if (timeFaction < 1){
+            requestAnimationFrame(animated)
+        }
+    })
+}
 
 
 init();
