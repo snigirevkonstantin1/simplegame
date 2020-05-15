@@ -6,7 +6,7 @@ const conteinerOfMemoji = document.querySelectorAll('div.conteiner');
 
 
 
-let memojibox = {
+const memojibox = {
     boardsize: document.querySelectorAll('div.conteiner').length,
     itsFirstClick: false,
     memoji: ['🐶', '🐱', '🐭', '🐹', '🐰', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐙', '🐵', '🦄', '🐞', '🦀', '🐟', '🐊', '🐓', '🦃', '🐿'],
@@ -101,34 +101,36 @@ function CreateBoardTwice(list){
 };
 
 
-function Coundown(func, t){
-    let coundObj = setTimeout(func, t);
-
-    this.stop = function(){
-        if (coundObj){
-            clearTimeout(coundObj);
-            coundObj = null;
+class Coundown {
+    constructor(func, t) {
+        let coundObj = setTimeout(func, t);
+        this.stop = function () {
+            if (coundObj) {
+                clearTimeout(coundObj);
+                coundObj = null;
+            };
         };
-        return this;
-    };
-};
+    }
+}
+;
 
 
-function Timer(func, t){
-    let timeObj = setInterval(func, t);
-
-    this.stop = function(){
-        if (timeObj){
-            clearInterval(timeObj);
-            timeObj = null;
-        }
-        return this;
-    };
-};
+class Timer {
+    constructor(func, t) {
+        let timeObj = setInterval(func, t);
+        this.stop = function () {
+            if (timeObj) {
+                clearInterval(timeObj);
+                timeObj = null;
+            }
+        };
+    }
+}
+;
 
 // Запись значения в блок
-function CreateBoard(list){
-    let box = memojibox.memojiBoard();
+const CreateBoard = (list)=>{
+    const box = memojibox.memojiBoard(); 
     for (let i = 0; i < list.length; i++){
         list[i].children[0].innerHTML = box[i];
         list[i].addEventListener('click', checkCorrectCard, false);
@@ -147,9 +149,8 @@ function checkCorrectCard(){
         open.classList.remove('active'); 
         flip(open);
     }
-    animated({ duration: 400, timing(timeFraction) {return timeFraction;},
-        draw(progress) {
-            openCard.style.webkitTransform = 'rotateY(' + progress * 180 + 'deg)';
+    animated({draw(progress) {
+        openCard.style.webkitTransform = 'rotateY(' + progress * 180 + 'deg)';
        }
      });
     open.classList.add('active');
@@ -179,10 +180,8 @@ function checkCorrectCard(){
 //Анимации 
 function flip(element){
     let flipelement = (element.previousSibling.parentElement);
-    console.log(flipelement)
     setTimeout (function() {
-        animated({ duration: 500, timing(timeFraction) {return timeFraction;},
-     draw(progress) {
+        animated({ draw(progress) {
          flipelement.style.webkitTransform = 'rotateY(' + (180 - progress * 180) + 'deg)';
        }
      });
@@ -193,7 +192,7 @@ function flip(element){
 }
 
 
-function CreateWord(word) {
+const CreateWord = (word) => {
 	for(let i = 0; i < word.length; i++) {
 		let newSpan = document.createElement('span');
         newSpan.innerHTML = word[i];
@@ -202,7 +201,7 @@ function CreateWord(word) {
 };
 
 
-function animated({timing, draw, duration}){
+function animated({draw, timing = (timeFraction) => {return timeFraction;}, duration = 300}){
     let start = performance.now();
     requestAnimationFrame(function animated(time){
         let timeFaction = (time - start) / duration;

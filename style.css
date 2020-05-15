@@ -19,6 +19,7 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.5);
+
 }
 .modalcontent{
     background-color: white;
@@ -120,6 +121,7 @@ p span:nth-child(5) {
     box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
     position: absolute;
     
+    
 }
 .conteiner div:nth-child(2) {
     background: linear-gradient(45deg, rgba(34,171,147,1) 0%, rgba(25,102,141,1) 100%);
@@ -128,10 +130,10 @@ p span:nth-child(5) {
 
 
   .conteiner div:nth-child(1){
-      background-color: white;
-      
-      
+      background-color: white;    
   }
+
+
 #one {
     margin: 0 auto;
     margin-top: 40px;
