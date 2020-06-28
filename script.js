@@ -3,6 +3,7 @@ const againbtn = document.getElementById('againbtn');
 const modal = document.getElementById('mymodal');
 const timer = document.getElementById('minsec');
 const conteinerOfMemoji = document.querySelectorAll('div.conteiner');
+let seconds;
 
 
 
@@ -47,11 +48,12 @@ const memojibox = {
 
 
 function init(){
+    seconds = 60;
     modal.style.display = 'none';
     againbtn.addEventListener('click', () => init());
     timep.innerHTML = '';
-    let timeString = new Date(0, 0, 0, 0, 31, 17, 0).toISOString().substr(14, 5);
-    timer.innerHTML = timeString; 
+    let timeString = '01.00';
+    timer.textContent = timeString; 
     let correctClass = document.querySelectorAll('.correct');
     for (let i = 0; i < correctClass.length; i++){
         flip(correctClass[i]);
@@ -71,14 +73,13 @@ function init(){
 
 // Работа с таймером и модальным окном
 function CreateBoardTwice(list){
-    let second = 16; 
     for (let i = 0; i < list.length; i++){
         list[i].addEventListener('click', function(){
             memojibox.memojiFirstClick();
             if (!memojibox.itsFirstClick){
                 memojibox.itsFirstClick = true;
                 let timerint = new Timer(function(){
-                timer.innerHTML = new Date(0, 0, 0, 0, 31, second--, 0).toISOString().substr(14, 5); 
+                timer.innerHTML = `00.${seconds-=1}`; 
                 let checkCorrect = document.querySelectorAll('.correct');
                 if (checkCorrect.length === conteinerOfMemoji.length){
                     timerint.stop();
